@@ -10,6 +10,7 @@
   keywords = ["peer2peer", "dtn"]
   exclude = [".vscode/", ".travis.yml"]
   readme = "README.md"
+  default-run = "dtnd"
 
 [features]
 

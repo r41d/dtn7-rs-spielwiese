@@ -194,11 +194,13 @@ pub async fn dispatch(bp: BundlePack) -> Result<()> {
     }
 
     if (*DTNCORE.lock()).is_in_endpoints(&bp.destination)
-    // TODO: lookup here AND in local delivery, optmize for just one
+    // TODO: lookup here AND in local delivery, optimize for just one
     {
+        debug!("Destination for {} is local endpoint → local_delivery", bp.id());
         local_delivery(bp.clone()).await?;
     }
     if !is_local_node_id(&bp.destination) {
+        debug!("Destination for {} is NOT local endpoint → forward", bp.id());
         tokio::spawn(forward(bp));
     }
     Ok(())
@@ -311,9 +313,6 @@ pub async fn forward(mut bp: BundlePack) -> Result<()> {
     trace!("Check delivery");
 
     let (nodes, delete_afterwards) = routing_sender_for_bundle(bp.clone()).await?;
-    if !nodes.is_empty() {
-        debug!("Attempting forwarding of {} to nodes: {:?}", bp.id(), nodes);
-    }
 
     if nodes.is_empty() {
         trace!("No new peers for forwarding of bundle {}", &bp.id());

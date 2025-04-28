@@ -1,0 +1,25 @@
+nodeid = "node1"
+debug = true
+beacon-period = true
+generate-status-reports = false
+parallel-bundle-processing = false
+routing = "epidemic"
+webport = 4001
+workdir = "/tmp/dtn7-ecla1"
+db = "mem"
+
+[core]
+janitor = "10s"
+
+[discovery]
+interval = "60s"
+peer-timeout = "120s"
+
+[endpoints]
+# local endpoints are always reachable under dtn://<nodeid>/<localname>
+local.0 = "incoming"
+local.1 = "null"
+
+[ecla]
+enabled  = true
+tcp_port = 0
