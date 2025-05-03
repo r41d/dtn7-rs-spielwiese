@@ -51,6 +51,7 @@ Normally dntd won't accept static peers for CLAs that are not present at startup
 ### Registration
 
 After the initial connect to the ECLA, the first packet that must be sent is the ``Register`` packet that contains the name of the CLA and if the beacon system should be enabled.
+Very important detail: The name of the ECLA needs to be the same at all dtn7 instances in order to function.
 If the registration is successful, the ECLA responds with a ``Registered`` packet containing basic information about the connected dtnd node.
 If an error occurred, an ``Error`` packet will be returned.
 Reasons for errors can be:

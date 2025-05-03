@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use std::str::FromStr;
 use tokio::sync::mpsc;
 use tokio::sync::mpsc::Sender;
-use log::warn;
+use log::info;
 
 #[cla(external)]
 #[derive(Debug, Clone)]
@@ -20,7 +20,6 @@ pub struct ExternalConvergenceLayer {
 
 impl ExternalConvergenceLayer {
     pub fn new(local_settings: Option<&HashMap<String, String>>) -> ExternalConvergenceLayer {
-        warn!("ECLA ctor! :D");
         let settings = local_settings.expect("no settings for ECLA");
 
         let mut port: u16 = 0;
@@ -35,19 +34,14 @@ impl ExternalConvergenceLayer {
         let name = settings.get("name").expect("name missing").to_string();
         let task_name = name.clone();
         let (tx, mut rx) = mpsc::channel(100);
-        warn!("ECLA ctor before spawning");
         tokio::spawn(async move {
-            warn!("ECLA ctor spawn");
             while let Some(cmd) = rx.recv().await {
-                warn!("ECLA ctor while");
                 match cmd {
                     super::ClaCmd::Transfer(dest, ready, reply) => {
-                        warn!("ECLA ctor Transfer");
                         if !discovery_only {
                             let name = task_name.clone();
-                            warn!("ECLA ctor before inner spawn");
                             tokio::spawn(async move {
-                                warn!("ECLA ctor scheduled_submission");
+                                info!("ExternalConvergenceLayer will schedule submission");
                                 reply
                                     .send(scheduled_submission(name, dest, &ready))
                                     .unwrap();

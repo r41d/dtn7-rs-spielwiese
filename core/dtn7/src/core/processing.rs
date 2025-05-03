@@ -301,7 +301,7 @@ async fn handle_previous_node_block(mut bundle: Bundle) -> Result<Bundle> {
 pub async fn forward(mut bp: BundlePack) -> Result<()> {
     let bpid = bp.id().to_string();
 
-    trace!("Forward request for bundle: {}", bpid);
+    debug!("Forward request for bundle: {}", bpid);
 
     bp.add_constraint(Constraint::ForwardPending);
     bp.remove_constraint(Constraint::DispatchPending);
@@ -315,7 +315,7 @@ pub async fn forward(mut bp: BundlePack) -> Result<()> {
     let (nodes, delete_afterwards) = routing_sender_for_bundle(bp.clone()).await?;
 
     if nodes.is_empty() {
-        trace!("No new peers for forwarding of bundle {}", &bp.id());
+        debug!("No new peers for forwarding of bundle {}", &bp.id());
         if delete_afterwards {
             store_remove(&bpid)?;
         }

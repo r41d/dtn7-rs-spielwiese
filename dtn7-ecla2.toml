@@ -3,16 +3,18 @@ debug = true
 beacon-period = true
 generate-status-reports = false
 parallel-bundle-processing = false
-routing = "epidemic"
 webport = 4002
 workdir = "/tmp/dtn7-ecla2"
 db = "mem"
+
+[routing]
+strategy = "flooding"
 
 [core]
 janitor = "10s"
 
 [discovery]
-interval = "60s"
+interval = "15s"
 peer-timeout = "120s"
 
 [endpoints]
