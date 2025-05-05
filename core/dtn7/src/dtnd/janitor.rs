@@ -2,7 +2,7 @@ use log::debug;
 use log::trace;
 
 async fn janitor() {
-    debug!("running janitor (cleaning up peers, reprocessing bundles)");
+    debug!("running janitor");
 
     trace!("cleaning up peers");
     crate::core::process_peers().await;

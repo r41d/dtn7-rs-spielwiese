@@ -14,8 +14,8 @@ strategy = "flooding"
 janitor = "10s"
 
 [discovery]
-interval = "15s"
-peer-timeout = "120s"
+interval = "30s"
+peer-timeout = "300s"
 
 [endpoints]
 # local endpoints are always reachable under dtn://<nodeid>/<localname>

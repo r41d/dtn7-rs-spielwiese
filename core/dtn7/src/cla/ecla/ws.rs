@@ -102,7 +102,7 @@ pub async fn handle_connection(ws: WebSocket) {
     )
     .await;
 
-    info!("{} disconnected", id);
+    info!("ECLA (WS) {} disconnected", id);
     handle_disconnect(id.to_string());
     PEER_MAP.lock().unwrap().remove(&id.to_string());
 }
