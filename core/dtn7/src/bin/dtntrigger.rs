@@ -126,7 +126,8 @@ fn main() -> anyhow::Result<()> {
                         eprintln!("[<] Received Bundle-Id: {}", bndl.id());
                     }
                     if args.print {
-                        eprintln!("{} → {}", bndl.primary.source.to_string(), String::from_utf8_lossy(data));
+                        let now = humantime::format_rfc3339_seconds(std::time::SystemTime::now());
+                        eprintln!("[{}] {} → {}", now, bndl.primary.source.to_string(), String::from_utf8_lossy(data));
                     } else {
                         let data_file = write_temp_file(data, args.verbose)?;
                         execute_cmd(&args.command, data_file, &bndl, args.verbose)?;

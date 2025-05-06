@@ -16,7 +16,7 @@ use crate::{RoutingNotifcation, CONFIG};
 use crate::{PEERS, STORE};
 use application_agent::ApplicationAgent;
 use bp7::EndpointID;
-use log::{error, warn, info, debug, trace};
+use log::{error, warn, info, trace};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::time::Instant;
@@ -147,7 +147,7 @@ pub async fn process_bundles() {
     let active_cla = (*CLAS.lock()).iter().any(|p| p.accepting());
     if !active_cla {
         warn!("No active/push CLA, not forwarding any bundles");
-        debug!("time to process bundles: {:?}", now_total.elapsed());
+        trace!("time to process bundles: {:?}", now_total.elapsed());
         return;
     }
 

@@ -9,7 +9,7 @@ use bp7::flags::BundleControlFlags;
 use bp7::{Bundle, CreationTimestamp, EndpointID};
 use dtn7_plus::client::{WsRecvData, WsSendData};
 use futures::{sink::SinkExt, stream::StreamExt};
-use log::{debug, warn};
+use log::{trace, debug, warn};
 use std::collections::HashSet;
 use std::sync::Arc;
 use std::{
@@ -102,7 +102,7 @@ pub async fn handle_socket(socket: WebSocket) {
                 return;
             }
 
-            debug!("sending ping");
+            trace!("sending ping");
             if tx2.send(Message::Ping(b"dtn7".to_vec())).await.is_err() {
                 break;
             }
@@ -206,7 +206,7 @@ impl WsAASession {
         socket: mpsc::Sender<Message>,
         msg: Message,
     ) -> Result<()> {
-        debug!("got message: {:?}", msg);
+        trace!("got message: {:?}", msg);
 
         match msg {
             Message::Text(msg) => {

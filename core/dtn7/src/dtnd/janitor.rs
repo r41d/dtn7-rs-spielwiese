@@ -1,8 +1,8 @@
-use log::debug;
+// use log::debug;
 use log::trace;
 
 async fn janitor() {
-    debug!("running janitor");
+    trace!("running janitor");
 
     trace!("cleaning up peers");
     crate::core::process_peers().await;

@@ -14,7 +14,7 @@ strategy = "flooding"
 janitor = "10s"
 
 [discovery]
-interval = "60s"
+interval = "120s"
 peer-timeout = "300s"
 
 [endpoints]

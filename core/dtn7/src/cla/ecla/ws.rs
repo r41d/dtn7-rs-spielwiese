@@ -5,7 +5,7 @@ use crate::lazy_static;
 use async_trait::async_trait;
 use axum::extract::ws::{Message, WebSocket};
 use futures_util::{future, stream::TryStreamExt, SinkExt, StreamExt};
-use log::{debug, trace, warn};
+use log::{debug, trace};
 use log::{error, info};
 use serde_json::Result;
 use std::collections::HashMap;
@@ -68,7 +68,7 @@ pub async fn handle_connection(ws: WebSocket) {
                     text.trim()
                 },
                 Err(e) => {
-                    warn!("Failed to convert message to text from ECLA id {}: {}", id, e);
+                    error!("Failed to convert message to text from ECLA id {}: {}", id, e);
                     return future::ok(());
                 }
             };
