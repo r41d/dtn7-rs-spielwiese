@@ -67,15 +67,19 @@ struct Args {
     #[clap(short, long)]
     endpoint: String,
 
+    /// Just print the message
+    #[clap(long)]
+    print: bool,
+
     /// Command to execute for incoming bundles, param1 = source, param2 = payload file
-    #[clap(short, long, required = true)]
+    #[clap(short, long, default_value = "echo")]
     command: String,
 }
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
     let port = if let Ok(env_port) = std::env::var("DTN_WEB_PORT") {
-        env_port // string is fine no need to parse number
+        env_port // string is fine, no need to parse number
     } else {
         args.port.to_string()
     };
@@ -121,8 +125,12 @@ fn main() -> anyhow::Result<()> {
                     if args.verbose {
                         eprintln!("[<] Received Bundle-Id: {}", bndl.id());
                     }
-                    let data_file = write_temp_file(data, args.verbose)?;
-                    execute_cmd(&args.command, data_file, &bndl, args.verbose)?;
+                    if args.print {
+                        eprintln!("{} → {}", bndl.primary.source.to_string(), String::from_utf8_lossy(data));
+                    } else {
+                        let data_file = write_temp_file(data, args.verbose)?;
+                        execute_cmd(&args.command, data_file, &bndl, args.verbose)?;
+                    }
                 } else if args.verbose {
                     eprintln!("[!] Unexpected payload!");
                     break;
@@ -135,7 +143,7 @@ fn main() -> anyhow::Result<()> {
             }
             Message::Pong(_) => {
                 if args.verbose {
-                    eprintln!("[<] Ping")
+                    eprintln!("[<] Pong")
                 }
             }
             Message::Close(_) => {
