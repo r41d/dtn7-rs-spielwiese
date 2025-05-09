@@ -7,6 +7,7 @@ use std::io::prelude::*;
 use std::process::Command;
 use tempfile::NamedTempFile;
 use tungstenite::Message;
+use chrono::Local;
 
 fn write_temp_file(data: &[u8], verbose: bool) -> Result<NamedTempFile> {
     let mut data_file = NamedTempFile::new()?;
@@ -40,7 +41,7 @@ fn execute_cmd(
         });
 
     if !output.status.success() || verbose {
-        println!("[*] status: {}", output.status);
+        eprintln!("[*] status: {}", output.status);
         std::io::stdout().write_all(&output.stdout)?;
         std::io::stderr().write_all(&output.stderr)?;
     }
@@ -96,7 +97,7 @@ fn main() -> anyhow::Result<()> {
     wscon.write_text("/bundle")?;
     let msg = wscon.read_text()?;
     if msg.starts_with("200 tx mode: bundle") {
-        println!("[*] {}", msg);
+        eprintln!("[*] {}", msg);
     } else {
         bail!("[!] Failed to set mode to `bundle`");
     }
@@ -104,7 +105,7 @@ fn main() -> anyhow::Result<()> {
     wscon.write_text(&format!("/subscribe {}", args.endpoint))?;
     let msg = wscon.read_text()?;
     if msg.starts_with("200 subscribed") {
-        println!("[*] {}", msg);
+        eprintln!("[*] {}", msg);
     } else {
         bail!("[!] Failed to subscribe to service");
     }
@@ -126,10 +127,14 @@ fn main() -> anyhow::Result<()> {
                         eprintln!("[<] Received Bundle-Id: {}", bndl.id());
                     }
                     if args.print {
-                        let now = humantime::format_rfc3339_seconds(std::time::SystemTime::now());
-                        eprintln!("[{}] {} → {}", now, bndl.primary.source.to_string(), String::from_utf8_lossy(data));
+                        println!("{};{}", String::from_utf8_lossy(data), Local::now().format("%H:%M:%S.%3f")); // sent;received
+                        // let now = humantime::format_rfc3339_millis(std::time::SystemTime::now());
+                        // println!("[{}] {} → {}", now, bndl.primary.source.to_string(), String::from_utf8_lossy(data));
                     } else {
                         let data_file = write_temp_file(data, args.verbose)?;
+                        if args.verbose {
+                            eprintln!("[*] wrote tmp data file, now executing...");
+                        }
                         execute_cmd(&args.command, data_file, &bndl, args.verbose)?;
                     }
                 } else if args.verbose {

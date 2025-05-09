@@ -401,7 +401,7 @@ pub async fn forward(mut bp: BundlePack) -> Result<()> {
                     // }
                 } else {
                     info!(
-                        "Sending bundle succeeded: {} {} {} in {:?}",
+                        "Bundle send success: id={} dest={} cla={} in {:?}",
                         &bpid,
                         n.dest,
                         n.cla_name,

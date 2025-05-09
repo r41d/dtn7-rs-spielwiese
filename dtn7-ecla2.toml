@@ -8,7 +8,7 @@ workdir = "/tmp/dtn7-ecla2"
 db = "mem"
 
 [routing]
-strategy = "flooding"
+strategy = "epidemic"
 
 [core]
 janitor = "10s"

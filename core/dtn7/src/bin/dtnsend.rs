@@ -119,6 +119,6 @@ fn main() {
             .unwrap();
         println!("Result: {}", res);
         let now = std::time::SystemTime::now();
-        println!("Time: {}", humantime::format_rfc3339(now));
+        println!("Time: {}", humantime::format_rfc3339_millis(now));
     }
 }

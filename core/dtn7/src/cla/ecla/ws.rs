@@ -5,8 +5,7 @@ use crate::lazy_static;
 use async_trait::async_trait;
 use axum::extract::ws::{Message, WebSocket};
 use futures_util::{future, stream::TryStreamExt, SinkExt, StreamExt};
-use log::{debug, trace};
-use log::{error, info};
+use log::{error, warn, info, debug, trace};
 use serde_json::Result;
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
@@ -57,6 +56,22 @@ pub async fn handle_connection(ws: WebSocket) {
                 return future::ok(());
             }
 
+            // match msg {
+            //     Message::Text(ref string) => {
+            //         debug!("Message = Text: {}", string);
+            //     },
+            //     Message::Binary(ref data) | Message::Ping(ref data) | Message::Pong(ref data) => {
+            //         warn!("Message = Binary/Ping/Pong: {:?}", data);
+            //         warn!("Message = u8: {:?}", std::str::from_utf8(data));
+            //     }
+            //     Message::Close(None) => {
+            //         debug!("Message = Close: None");
+            //     },
+            //     Message::Close(Some(ref frame)) => {
+            //         debug!("Message = Close: {}", &frame.reason);
+            //     },
+            // }
+
             // Try to convert the message to text
             let msg_text = match msg.to_text() {
                 Ok(text) => {
@@ -68,7 +83,7 @@ pub async fn handle_connection(ws: WebSocket) {
                     text.trim()
                 },
                 Err(e) => {
-                    error!("Failed to convert message to text from ECLA id {}: {}", id, e);
+                    warn!("Failed to convert message to text from ECLA id {}: {}", id, e);
                     return future::ok(());
                 }
             };
