@@ -274,7 +274,7 @@ pub fn scheduled_submission(name: String, dest: String, ready: &ByteBuffer) -> T
             if let Ok(bndl) = Bundle::try_from(ready.as_slice()) {
                 let packet: Packet = Packet::ForwardData(ForwardData {
                     dst: dest.to_string(),
-                    src: "".to_string(), // Leave blank for now and let the Module set it to a protocol-specific address on his side
+                    src: "".to_string(), // Leave blank for now and let the Module set it to a protocol-specific address on its side
                     bundle_id: bndl.id(),
                     data: ready.to_vec(),
                 });
