@@ -26,7 +26,7 @@ if local_node.startswith('ipn'):
     service = 7
 
 # Prior to receiving anything register the local service endpoint
-register = urllib.request.urlopen(f"http://127.0.0.1:{PORT}/register?"+str(service)).read()
+register = urllib.request.urlopen(f"http://127.0.0.1:{PORT}/register?{service}").read()
 print(register)
 
 def on_open(ws):

@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use std::str::FromStr;
 use tokio::sync::mpsc;
 use tokio::sync::mpsc::Sender;
-use log::info;
+use log::debug;
 
 #[cla(external)]
 #[derive(Debug, Clone)]
@@ -41,7 +41,7 @@ impl ExternalConvergenceLayer {
                         if !discovery_only {
                             let name = task_name.clone();
                             tokio::spawn(async move {
-                                info!("ExternalConvergenceLayer will schedule submission");
+                                debug!("ExternalConvergenceLayer will schedule submission");
                                 reply
                                     .send(scheduled_submission(name, dest, &ready))
                                     .unwrap();
